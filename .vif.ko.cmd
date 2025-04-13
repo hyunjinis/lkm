@@ -1,0 +1,1 @@
+savedcmd_/home/rpi2/lkm/vif.ko := ld -r -EL  -maarch64elf -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T scripts/module.lds -o /home/rpi2/lkm/vif.ko /home/rpi2/lkm/vif.o /home/rpi2/lkm/vif.mod.o
