@@ -43,9 +43,9 @@ __used __section("__versions") = {
 	{ 0x122c3a7e, "_printk" },
 	{ 0x77605b80, "remove_proc_entry" },
 	{ 0x37a0cba, "kfree" },
-	{ 0x18071dd4, "fp_pay" },
-	{ 0x15a1d713, "fp_newvif" },
-	{ 0x8b3dd69c, "fp_delvif" },
+	{ 0xd8c27714, "fp_pay" },
+	{ 0x650b7b28, "fp_newvif" },
+	{ 0x71e3d87d, "fp_delvif" },
 	{ 0x7a2af7b4, "cpu_number" },
 	{ 0xe3ed1c5f, "off_list" },
 	{ 0xc6f46339, "init_timer_key" },
@@ -68,4 +68,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "bridge");
 
 
-MODULE_INFO(srcversion, "C6F812813C5C4D26242B0DD");
+MODULE_INFO(srcversion, "11BDF44D8FFF40DCBAC80FC");

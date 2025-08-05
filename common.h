@@ -16,12 +16,12 @@
 #include <linux/etherdevice.h>
 #include <linux/wait.h>
 #include <linux/sched.h>
-#include </home/rpi2/qCon---rpi5-v6.8-/net/bridge/br_private.h>
+#include </home/rpi1/qCon-rpi2-/net/bridge/br_private.h>
 
 
 //default value
 #define CONFIG_BRIDGE_CREDIT_MODE
-#define MAX_CREDIT 10000000	
+#define MAX_CREDIT 40000000	
 #define MIN_CREDIT 100000
 
 //pay function

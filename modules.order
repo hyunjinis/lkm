@@ -1,1 +1,1 @@
-/home/rpi2/lkm/vif.o
+/home/rpi1/lkm/vif.o

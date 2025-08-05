@@ -1,8 +1,8 @@
-savedcmd_/home/rpi2/lkm/vif.o := aarch64-linux-gnu-gcc -Wp,-MMD,/home/rpi2/lkm/.vif.o.d -nostdinc -I./arch/arm64/include -I./arch/arm64/include/generated  -I./include -I./arch/arm64/include/uapi -I./arch/arm64/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY -DKASAN_SHADOW_SCALE_SHIFT= -fmacro-prefix-map=./= -std=gnu11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno-strict-aliasing -mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi -mabi=lp64 -fno-asynchronous-unwind-tables -fno-unwind-tables -mbranch-protection=pac-ret -Wa,-march=armv8.5-a -DARM64_ASM_ARCH='"armv8.5-a"' -DKASAN_SHADOW_SCALE_SHIFT= -fno-delete-null-pointer-checks -O2 -fno-allow-store-data-races -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-init=zero -fno-stack-clash-protection -fpatchable-function-entry=4,2 -falign-functions=8 -fstrict-flex-arrays=3 -fno-strict-overflow -fno-stack-check -fconserve-stack -Wall -Wundef -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Werror=strict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address -Wno-address-of-packed-member -Wmissing-declarations -Wmissing-prototypes -Wframe-larger-than=2048 -Wno-main -Wno-unused-but-set-variable -Wno-unused-const-variable -Wno-dangling-pointer -Wvla -Wno-pointer-sign -Wcast-function-type -Wno-stringop-overflow -Wno-array-bounds -Wno-alloc-size-larger-than -Wimplicit-fallthrough=5 -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wenum-conversion -Wno-unused-but-set-variable -Wno-unused-const-variable -Wno-restrict -Wno-packed-not-aligned -Wno-format-overflow -Wno-format-truncation -Wno-stringop-truncation -Wno-override-init -Wno-missing-field-initializers -Wno-type-limits -Wno-shift-negative-value -Wno-maybe-uninitialized -Wno-sign-compare -mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0 -mstack-protector-guard-offset=1416  -DMODULE  -DKBUILD_BASENAME='"vif"' -DKBUILD_MODNAME='"vif"' -D__KBUILD_MODNAME=kmod_vif -c -o /home/rpi2/lkm/vif.o /home/rpi2/lkm/vif.c  
+savedcmd_/home/rpi1/lkm/vif.o := aarch64-linux-gnu-gcc -Wp,-MMD,/home/rpi1/lkm/.vif.o.d -nostdinc -I./arch/arm64/include -I./arch/arm64/include/generated  -I./include -I./arch/arm64/include/uapi -I./arch/arm64/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h -include ./include/linux/compiler_types.h -D__KERNEL__ -mlittle-endian -DCC_USING_PATCHABLE_FUNCTION_ENTRY -DKASAN_SHADOW_SCALE_SHIFT= -fmacro-prefix-map=./= -std=gnu11 -fshort-wchar -funsigned-char -fno-common -fno-PIE -fno-strict-aliasing -mgeneral-regs-only -DCONFIG_CC_HAS_K_CONSTRAINT=1 -Wno-psabi -mabi=lp64 -fno-asynchronous-unwind-tables -fno-unwind-tables -mbranch-protection=pac-ret -Wa,-march=armv8.5-a -DARM64_ASM_ARCH='"armv8.5-a"' -DKASAN_SHADOW_SCALE_SHIFT= -fno-delete-null-pointer-checks -O2 -fno-allow-store-data-races -fstack-protector-strong -fno-omit-frame-pointer -fno-optimize-sibling-calls -ftrivial-auto-var-init=zero -fno-stack-clash-protection -fpatchable-function-entry=4,2 -falign-functions=8 -fstrict-flex-arrays=3 -fno-strict-overflow -fno-stack-check -fconserve-stack -Wall -Wundef -Werror=implicit-function-declaration -Werror=implicit-int -Werror=return-type -Werror=strict-prototypes -Wno-format-security -Wno-trigraphs -Wno-frame-address -Wno-address-of-packed-member -Wmissing-declarations -Wmissing-prototypes -Wframe-larger-than=2048 -Wno-main -Wno-unused-but-set-variable -Wno-unused-const-variable -Wno-dangling-pointer -Wvla -Wno-pointer-sign -Wcast-function-type -Wno-stringop-overflow -Wno-array-bounds -Wno-alloc-size-larger-than -Wimplicit-fallthrough=5 -Werror=date-time -Werror=incompatible-pointer-types -Werror=designated-init -Wenum-conversion -Wno-unused-but-set-variable -Wno-unused-const-variable -Wno-restrict -Wno-packed-not-aligned -Wno-format-overflow -Wno-format-truncation -Wno-stringop-truncation -Wno-override-init -Wno-missing-field-initializers -Wno-type-limits -Wno-shift-negative-value -Wno-maybe-uninitialized -Wno-sign-compare -mstack-protector-guard=sysreg -mstack-protector-guard-reg=sp_el0 -mstack-protector-guard-offset=1416  -DMODULE  -DKBUILD_BASENAME='"vif"' -DKBUILD_MODNAME='"vif"' -D__KBUILD_MODNAME=kmod_vif -c -o /home/rpi1/lkm/vif.o /home/rpi1/lkm/vif.c  
 
-source_/home/rpi2/lkm/vif.o := /home/rpi2/lkm/vif.c
+source_/home/rpi1/lkm/vif.o := /home/rpi1/lkm/vif.c
 
-deps_/home/rpi2/lkm/vif.o := \
+deps_/home/rpi1/lkm/vif.o := \
   include/linux/compiler-version.h \
     $(wildcard include/config/CC_VERSION_TEXT) \
   include/linux/kconfig.h \
@@ -29,7 +29,7 @@ deps_/home/rpi2/lkm/vif.o := \
     $(wildcard include/config/ARM64_PTR_AUTH_KERNEL) \
     $(wildcard include/config/ARM64_PTR_AUTH) \
     $(wildcard include/config/BUILTIN_RETURN_ADDRESS_STRIPS_PAC) \
-  /home/rpi2/lkm/common.h \
+  /home/rpi1/lkm/common.h \
     $(wildcard include/config/BRIDGE_CREDIT_MODE) \
   include/linux/module.h \
     $(wildcard include/config/MODULES) \
@@ -1570,7 +1570,7 @@ deps_/home/rpi2/lkm/vif.o := \
   arch/arm64/include/generated/asm/unaligned.h \
   include/asm-generic/unaligned.h \
   include/linux/unaligned/packed_struct.h \
-  /home/rpi2/qCon---rpi5-v6.8-/net/bridge/br_private.h \
+  /home/rpi1/qCon-rpi2-/net/bridge/br_private.h \
     $(wildcard include/config/BRIDGE_IGMP_SNOOPING) \
     $(wildcard include/config/BRIDGE_VLAN_FILTERING) \
     $(wildcard include/config/BRIDGE_MRP) \
@@ -1673,6 +1673,6 @@ deps_/home/rpi2/lkm/vif.o := \
   include/uapi/linux/if_vlan.h \
   include/linux/rhashtable.h \
 
-/home/rpi2/lkm/vif.o: $(deps_/home/rpi2/lkm/vif.o)
+/home/rpi1/lkm/vif.o: $(deps_/home/rpi1/lkm/vif.o)
 
-$(deps_/home/rpi2/lkm/vif.o):
+$(deps_/home/rpi1/lkm/vif.o):

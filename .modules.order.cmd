@@ -1,1 +1,1 @@
-savedcmd_/home/rpi2/lkm/modules.order := {   echo /home/rpi2/lkm/vif.o; :; } > /home/rpi2/lkm/modules.order
+savedcmd_/home/rpi1/lkm/modules.order := {   echo /home/rpi1/lkm/vif.o; :; } > /home/rpi1/lkm/modules.order

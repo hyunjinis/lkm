@@ -36,57 +36,64 @@ static void credit_accounting(struct timer_list *timer){
 	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list){
 		if(!temp_vif)
 			goto out;
-		temp_vif->remaining_credit = 0;
 		weight_left -= temp_vif->weight;
+		credit_fair = ((credit_total * temp_vif->weight) + (total -1 )) / total;
+		temp_vif->remaining_credit += credit_fair;
+
+		//min-max credit input is a percentage
+		if(temp_vif->min_credit!=0) min_credit_calc = (MAX_CREDIT/100) * temp_vif->min_credit;//
+		if(temp_vif->max_credit!=0) max_credit_calc = (MAX_CREDIT/100) * temp_vif->max_credit;//
 		
-		// Step 1. 먼저 min 보장
-		if (temp_vif->min_credit != 0) {
-    			min_credit_calc = (MAX_CREDIT / 100) * temp_vif->min_credit;
-			if (temp_vif->remaining_credit < min_credit_calc) {
-        			credit_total -= (min_credit_calc - temp_vif->remaining_credit);
+		if(temp_vif->min_credit!=0 || temp_vif->max_credit!=0){
+			if(temp_vif->min_credit!=0 && temp_vif->remaining_credit < min_credit_calc){
+				credit_total-=(min_credit_calc - temp_vif->remaining_credit);
 				temp_vif->remaining_credit = min_credit_calc;
-        			total -= temp_vif->weight;
-				//printk("DEBUG: min_credit_calc=%u, remaining_credit=%u\n", min_credit_calc, temp_vif->remaining_credit);	
+				total -= temp_vif->weight;
+				
+				list_del(&temp_vif->vif_list);
+				list_add(&temp_vif->vif_list, &active_vif_list);
 			}
+			else if(temp_vif->max_credit!=0 && temp_vif->remaining_credit > max_credit_calc){
+				credit_total+= (temp_vif->remaining_credit - max_credit_calc);
+				temp_vif->remaining_credit = max_credit_calc;
+				total -= temp_vif->weight;
+				list_del(&temp_vif->vif_list);
+				list_add(&temp_vif->vif_list, &active_vif_list);
+			}
+			goto skip;
 		}
-		if (temp_vif->max_credit != 0) {
-                        max_credit_calc = (MAX_CREDIT / 100) * temp_vif->max_credit;
-                        if (temp_vif->remaining_credit > max_credit_calc)
-                                credit_total+= (temp_vif->remaining_credit - max_credit_calc);
-                                temp_vif->remaining_credit = max_credit_calc;
-                                total -= temp_vif->weight;
-				//printk("DEBUG: max_credit_calc=%u, remaining_credit=%u\n", max_credit_calc, temp_vif->remaining_credit);
-
-                }
-
-	}
-
-	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list){
-		if (temp_vif->remaining_credit > 0)
-			continue;
-			// Step 2. credit_fair 분배
-		if (total > 0) {
-        		credit_fair = ((credit_total * temp_vif->weight) + (total - 1)) / total;
-    		} else {
-        		credit_fair = 0;
-    		}
-
-    		temp_vif->remaining_credit = credit_fair;
-		//printk("DEBUG: vif_id=%d, remaining_credit(after_fair)=%u\n", temp_vif->id, temp_vif->remaining_credit);
+		//temp_vif->remaining_credit += credit_fair;
+		
+	/*	
+		if(temp_vif->remaining_credit <= MAX_CREDIT){
+			credit_xtra = 1;
+		}
+		else
+		{
+			credit_left += (temp_vif->remaining_credit - credit_fair);		
+			if(weight_left != 0){
+				credit_total += ((credit_left*total)+(weight_left - 1))/weight_left;
+				credit_left=0;
+			}
+			if(credit_xtra){
+				list_del(&temp_vif->vif_list);
+				list_add(&temp_vif->vif_list, &active_vif_list);
+			}
+			}*/
+			
 		if(CA->num_vif > 1)
-                        temp_vif->remaining_credit = credit_fair;
-                else
-                        temp_vif->remaining_credit = MAX_CREDIT;
+			temp_vif->remaining_credit = credit_fair;
+		else
+			temp_vif->remaining_credit = MAX_CREDIT;
+		
+		
+skip:	
+		if(temp_vif->need_reschedule == true)
+			temp_vif->need_reschedule = false;
+		
+		if(counter%10 == 0)
+			printk("KNU: vif_id:%d, weight:%u, min:%d, max:%u, credit:%u, credit_total:%u\n", temp_vif->id, temp_vif->weight, temp_vif->min_credit, temp_vif->max_credit, temp_vif->remaining_credit, credit_total);
 	}
-	
-	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list) {
-                if(temp_vif->need_reschedule == true)
-                        temp_vif->need_reschedule = false;
-
-                if(counter%10 == 0)
-                        printk("KNU: vif_id:%d, weight:%u, min:%d, max:%u, credit:%u, credit_total:%u\n", temp_vif->id, temp_vif->weight, temp_vif->min_credit, temp_vif->max_credit, temp_vif->remaining_credit, credit_total);
-        }
-
 	CA->credit_balance = credit_left;
 	credit_left=0;
 out:
