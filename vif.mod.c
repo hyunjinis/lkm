@@ -68,4 +68,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "bridge");
 
 
-MODULE_INFO(srcversion, "11BDF44D8FFF40DCBAC80FC");
+MODULE_INFO(srcversion, "B4C52ACCA434EEAC1AB7BD8");

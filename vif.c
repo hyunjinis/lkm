@@ -20,6 +20,7 @@ static void credit_accounting(struct timer_list *timer){
 	unsigned int credit_fair =0;
 	int credit_xtra =0;
 	unsigned int min_credit_calc=0, max_credit_calc=0;
+	//unsigned int used_credit=0;
 
 	counter++;	
 
@@ -37,6 +38,12 @@ static void credit_accounting(struct timer_list *timer){
 		if(!temp_vif)
 			goto out;
 		temp_vif->remaining_credit = 0;
+		//temp_vif->used_credit = 0;
+		
+		if (counter % 10 == 0) {
+    			temp_vif->used_credit = 0;
+		}
+
 		weight_left -= temp_vif->weight;
 		
 		// Step 1. 먼저 min 보장
@@ -82,9 +89,9 @@ static void credit_accounting(struct timer_list *timer){
 	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list) {
                 if(temp_vif->need_reschedule == true)
                         temp_vif->need_reschedule = false;
-
-                if(counter%10 == 0)
-                        printk("KNU: vif_id:%d, weight:%u, min:%d, max:%u, credit:%u, credit_total:%u\n", temp_vif->id, temp_vif->weight, temp_vif->min_credit, temp_vif->max_credit, temp_vif->remaining_credit, credit_total);
+	
+                if(counter%10 == 9)
+                        printk("KNU: vif_id:%d, weight:%u, min:%d, max:%u, credit:%u, used:%u, credit_total:%u\n", temp_vif->id, temp_vif->weight, temp_vif->min_credit, temp_vif->max_credit, temp_vif->remaining_credit, temp_vif->used_credit, credit_total);
         }
 
 	CA->credit_balance = credit_left;
@@ -244,20 +251,23 @@ static const struct proc_ops vif_opt ={
         .proc_read = vif_read,
 };
 
-
 int pay_credit(struct ancs_container *vif, struct sk_buff *skb){
+	//printk("DEBUG: fp_pay called for vif_id=%d\n", vif->id);
 	//if date_len is zero then it means no fragment
-	//printk(KERN_INFO "MINKOO:vif%u remaining credit:%u paying:%u",vif->id,vif->remaining_credit, packet_data_size);
 	if(vif->remaining_credit == MAX_CREDIT){
+		//printk("DEBUG: MAX_CREDIT bypass\n");
 		//printk(KERN_INFO "PAYMENT SUCCESS\n");
 		return PAY_SUCCESS;
 	}
 	if(vif->remaining_credit < skb->data_len){
+		//printk(KERN_INFO "DEBUG: NOT ENOUGH CREDIT\n");
 		//printk(KERN_INFO "PAYMENT FAILURE\n");
 		return PAY_FAIL;
 	}
 	else{
 		vif->remaining_credit -= skb->data_len;
+		vif->used_credit += skb->data_len;
+		//printk("MINKOO:vif%u remaining credit:%u data_len=%u used:%u",vif->id,vif->remaining_credit, skb->data_len, vif->used_credit);
 		//printk(KERN_INFO "PAYMENT SUCCESS\n");
 		return PAY_SUCCESS;
 	}
