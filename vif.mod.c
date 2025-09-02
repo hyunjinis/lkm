@@ -35,12 +35,12 @@ MODULE_INFO(retpoline, "Y");
 
 static const struct modversion_info ____versions[]
 __used __section("__versions") = {
+	{ 0x122c3a7e, "_printk" },
 	{ 0xfd038f32, "kmalloc_caches" },
 	{ 0x8e690175, "kmalloc_trace" },
 	{ 0x3c3ff9fd, "sprintf" },
 	{ 0x89bbb02b, "proc_mkdir" },
 	{ 0xa99dd3dd, "proc_create_data" },
-	{ 0x122c3a7e, "_printk" },
 	{ 0x77605b80, "remove_proc_entry" },
 	{ 0x37a0cba, "kfree" },
 	{ 0xd8c27714, "fp_pay" },
@@ -68,4 +68,4 @@ __used __section("__versions") = {
 MODULE_INFO(depends, "bridge");
 
 
-MODULE_INFO(srcversion, "B4C52ACCA434EEAC1AB7BD8");
+MODULE_INFO(srcversion, "2B8210C2EDCFBCF78F3027D");

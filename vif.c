@@ -32,7 +32,7 @@ static void credit_accounting(struct timer_list *timer){
 	//	credit_total += CA->credit_balance;//limit credit balance value
 	
 	if(counter%10==0)	
-		printk("MINKOO%d: credit total %u total:%u credit balance:%u\n",counter,credit_total, total, CA->credit_balance);
+		//printk("MINKOO%d: credit total %u total:%u credit balance:%u\n",counter,credit_total, total, CA->credit_balance);
 
 	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list){
 		if(!temp_vif)
@@ -49,7 +49,9 @@ static void credit_accounting(struct timer_list *timer){
 		// Step 1. 먼저 min 보장
 		if (temp_vif->min_credit != 0) {
     			min_credit_calc = (MAX_CREDIT / 100) * temp_vif->min_credit;
-			if (temp_vif->remaining_credit < min_credit_calc) {
+			if (CA->num_vif == 1){
+				temp_vif->remaining_credit = MAX_CREDIT;
+			} else if (temp_vif->remaining_credit < min_credit_calc) {
         			credit_total -= (min_credit_calc - temp_vif->remaining_credit);
 				temp_vif->remaining_credit = min_credit_calc;
         			total -= temp_vif->weight;
@@ -58,17 +60,19 @@ static void credit_accounting(struct timer_list *timer){
 		}
 		if (temp_vif->max_credit != 0) {
                         max_credit_calc = (MAX_CREDIT / 100) * temp_vif->max_credit;
-                        if (temp_vif->remaining_credit > max_credit_calc)
+                        if (CA->num_vif == 1){
+                                temp_vif->remaining_credit = MAX_CREDIT;
+			} else if (temp_vif->remaining_credit > max_credit_calc){
                                 credit_total+= (temp_vif->remaining_credit - max_credit_calc);
                                 temp_vif->remaining_credit = max_credit_calc;
                                 total -= temp_vif->weight;
 				//printk("DEBUG: max_credit_calc=%u, remaining_credit=%u\n", max_credit_calc, temp_vif->remaining_credit);
-
+			}
                 }
 
-	}
+	
 
-	list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list){
+	//#list_for_each_entry_safe(temp_vif, next_vif, &active_vif_list, vif_list){
 		if (temp_vif->remaining_credit > 0)
 			continue;
 			// Step 2. credit_fair 분배
@@ -79,6 +83,7 @@ static void credit_accounting(struct timer_list *timer){
     		}
 
     		temp_vif->remaining_credit = credit_fair;
+		
 		//printk("DEBUG: vif_id=%d, remaining_credit(after_fair)=%u\n", temp_vif->id, temp_vif->remaining_credit);
 		if(CA->num_vif > 1)
                         temp_vif->remaining_credit = credit_fair;
@@ -97,7 +102,7 @@ static void credit_accounting(struct timer_list *timer){
 	CA->credit_balance = credit_left;
 	credit_left=0;
 out:
-	mod_timer(&CA->account_timer, jiffies + msecs_to_jiffies(100));
+	mod_timer(&CA->account_timer, jiffies + msecs_to_jiffies(200));
 	return;
 }
 
@@ -124,7 +129,7 @@ static ssize_t vif_write(struct file *file, const char __user *user_buffer, size
         }
 
 	vif = (struct ancs_container *)file_inode(file)->i_private;
-        printk("MINKOO_w: cnt:%d, filename:%s, input=%u, vif=%p\n", cnt++, filename, value, vif);	
+	//printk("MINKOO_w: cnt:%d, filename:%s, input=%u, vif=%p\n", cnt++, filename, value, vif);	
 	if(!(vif))
 	{
 		printk(KERN_INFO "NULL Data\n");
@@ -159,6 +164,13 @@ static ssize_t vif_write(struct file *file, const char __user *user_buffer, size
                 printk("MINKOO: image_size:%d\n", vif->image_size);
                 goto proc_out_w;
         }
+	if(!strcmp(filename, "used_credit"))
+        {
+                vif->used_credit = value;
+                printk("MINKOO: used_credit:%d\n", vif->used_credit);
+                goto proc_out_w;
+        }
+        printk("match failure\n");
 
 	printk("match failure\n");
 	return count;
@@ -255,18 +267,18 @@ int pay_credit(struct ancs_container *vif, struct sk_buff *skb){
 	//printk("DEBUG: fp_pay called for vif_id=%d\n", vif->id);
 	//if date_len is zero then it means no fragment
 	if(vif->remaining_credit == MAX_CREDIT){
-		//printk("DEBUG: MAX_CREDIT bypass\n");
+		printk("DEBUG: MAX_CREDIT bypass\n");
 		//printk(KERN_INFO "PAYMENT SUCCESS\n");
 		return PAY_SUCCESS;
 	}
-	if(vif->remaining_credit < skb->data_len){
+	if(vif->remaining_credit < skb->len){
 		//printk(KERN_INFO "DEBUG: NOT ENOUGH CREDIT\n");
-		//printk(KERN_INFO "PAYMENT FAILURE\n");
+		printk(KERN_INFO "PAYMENT FAILURE\n");
 		return PAY_FAIL;
 	}
 	else{
-		vif->remaining_credit -= skb->data_len;
-		vif->used_credit += skb->data_len;
+		vif->remaining_credit -= skb->len;
+		vif->used_credit += skb->len;
 		//printk("MINKOO:vif%u remaining credit:%u data_len=%u used:%u",vif->id,vif->remaining_credit, skb->data_len, vif->used_credit);
 		//printk(KERN_INFO "PAYMENT SUCCESS\n");
 		return PAY_SUCCESS;
